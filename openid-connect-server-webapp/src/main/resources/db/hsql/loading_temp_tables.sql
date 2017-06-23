@@ -15,24 +15,8 @@ CREATE TEMPORARY TABLE IF NOT EXISTS users_TEMP (
 
 CREATE TEMPORARY TABLE IF NOT EXISTS user_info_TEMP (
 	sub VARCHAR(256) not null primary key,
-	preferred_username VARCHAR(256),
-	name VARCHAR(256),
-	given_name VARCHAR(256),
-	family_name VARCHAR(256),
-	middle_name VARCHAR(256),
-	nickname VARCHAR(256),
-	profile VARCHAR(256),
-	picture VARCHAR(256),
-	website VARCHAR(256),
-	email VARCHAR(256),
-	email_verified BOOLEAN,
-	gender VARCHAR(256),
-	zone_info VARCHAR(256),
-	locale VARCHAR(256),
-	phone_number VARCHAR(256),
-	address_id VARCHAR(256),
-	updated_time VARCHAR(256),
-	birthdate VARCHAR(256)
+	login VARCHAR(256),
+	fio VARCHAR(256)
 );
 
 CREATE TEMPORARY TABLE IF NOT EXISTS client_details_TEMP (

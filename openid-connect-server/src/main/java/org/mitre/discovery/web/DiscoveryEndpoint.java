@@ -17,11 +17,12 @@
  *******************************************************************************/
 package org.mitre.discovery.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.base.Function;
+import com.google.common.base.Strings;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.nimbusds.jose.Algorithm;
+import com.nimbusds.jose.JWSAlgorithm;
 import org.mitre.discovery.util.WebfingerURLNormalizer;
 import org.mitre.jwt.encryption.service.JWTEncryptionAndDecryptionService;
 import org.mitre.jwt.signer.service.JWTSigningAndValidationService;
@@ -51,12 +52,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.google.common.base.Function;
-import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.nimbusds.jose.Algorithm;
-import com.nimbusds.jose.JWSAlgorithm;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -122,12 +121,13 @@ public class DiscoveryEndpoint {
 				// acct: URI (email address format)
 
 				// check on email addresses first
-				UserInfo user = userService.getByEmailAddress(resourceUri.getUserInfo() + "@" + resourceUri.getHost());
+				//todo IGBE
+//				UserInfo user = userService.getByEmailAddress(resourceUri.getUserInfo() + "@" + resourceUri.getHost());
 
-				if (user == null) {
+//				if (user == null) {
 					// user wasn't found, see if the local part of the username matches, plus our issuer host
 
-					user = userService.getByUsername(resourceUri.getUserInfo()); // first part is the username
+					UserInfo user = userService.getByUsername(resourceUri.getUserInfo()); // first part is the username
 
 					if (user != null) {
 						// username matched, check the host component
@@ -148,7 +148,7 @@ public class DiscoveryEndpoint {
 						return HttpCodeView.VIEWNAME;
 					}
 
-				}
+//				}
 
 			} else {
 				logger.info("Unknown URI format: " + resource);

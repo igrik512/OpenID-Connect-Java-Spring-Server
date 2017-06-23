@@ -20,9 +20,7 @@
  */
 package org.mitre.openid.connect.service.impl;
 
-import java.util.Set;
-import java.util.UUID;
-
+import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +36,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -92,7 +91,7 @@ public class TestUUIDPairwiseIdentiferService {
 	@Before
 	public void prepare() {
 		userInfoRegular = new DefaultUserInfo();
-		userInfoRegular.setPreferredUsername(regularUsername);
+//		userInfoRegular.setPreferredUsername(regularUsername);
 		userInfoRegular.setSub(regularSub);
 
 		// pairwise set 1

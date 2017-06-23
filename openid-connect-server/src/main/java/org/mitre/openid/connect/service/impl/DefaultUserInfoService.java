@@ -70,9 +70,4 @@ public class DefaultUserInfoService implements UserInfoService {
 
 	}
 
-	@Override
-	public UserInfo getByEmailAddress(String email) {
-		return userInfoRepository.getByEmailAddress(email);
-	}
-
 }

@@ -23,6 +23,7 @@ INSERT INTO client_scope_TEMP (owner_id, scope) VALUES
 
 INSERT INTO client_redirect_uri_TEMP (owner_id, redirect_uri) VALUES
 	('client', 'http://localhost/'),
+	('client', 'http://localhost:8081/simple-web-app/openid_connect_login'),
 	('client', 'http://localhost:8080/');
 	
 INSERT INTO client_grant_type_TEMP (owner_id, grant_type) VALUES
