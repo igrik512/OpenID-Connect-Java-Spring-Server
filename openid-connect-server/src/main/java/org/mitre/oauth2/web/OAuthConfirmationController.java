@@ -1,37 +1,30 @@
-/*******************************************************************************
+/**
  * Copyright 2017 The MIT Internet Trust Consortium
- *
+ * <p>
  * Portions copyright 2011-2013 The MITRE Corporation
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 /**
  *
  */
 package org.mitre.oauth2.web;
 
-import static org.mitre.openid.connect.request.ConnectRequestParameters.PROMPT;
-import static org.mitre.openid.connect.request.ConnectRequestParameters.PROMPT_SEPARATOR;
-
-import java.net.URISyntaxException;
-import java.security.Principal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonObject;
 import org.apache.http.client.utils.URIBuilder;
 import org.mitre.oauth2.model.ClientDetailsEntity;
 import org.mitre.oauth2.model.SystemScope;
@@ -55,15 +48,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonObject;
+import java.net.URISyntaxException;
+import java.security.Principal;
+import java.util.*;
+
+import static org.mitre.openid.connect.request.ConnectRequestParameters.PROMPT;
+import static org.mitre.openid.connect.request.ConnectRequestParameters.PROMPT_SEPARATOR;
 
 /**
  * @author jricher
- *
  */
 @Controller
 @SessionAttributes("authorizationRequest")
@@ -104,11 +97,11 @@ public class OAuthConfirmationController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/oauth/confirm_access")
 	public String confimAccess(Map<String, Object> model, @ModelAttribute("authorizationRequest") AuthorizationRequest authRequest,
-			Principal p) {
+		Principal p) {
 
 		// Check the "prompt" parameter to see if we need to do special processing
 
-		String prompt = (String)authRequest.getExtensions().get(PROMPT);
+		String prompt = (String) authRequest.getExtensions().get(PROMPT);
 		List<String> prompts = Splitter.on(PROMPT_SEPARATOR).splitToList(Strings.nullToEmpty(prompt));
 		ClientDetailsEntity client = null;
 
@@ -174,7 +167,8 @@ public class OAuthConfirmationController {
 		}
 
 		// add in any scopes that aren't system scopes to the end of the list
-		sortedScopes.addAll(Sets.difference(scopes, systemScopes));
+		//IGBE CUSTOM HACK for working
+		sortedScopes.addAll(Sets.difference(systemScopes, scopes));
 
 		model.put("scopes", sortedScopes);
 

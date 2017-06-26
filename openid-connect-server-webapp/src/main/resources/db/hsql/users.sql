@@ -29,7 +29,7 @@ INSERT INTO authorities_TEMP (username, authority) VALUES
 -- By default, the username column here has to match the username column in the users table, above
 INSERT INTO user_info_TEMP (sub, login, fio) VALUES
   ('90342.ASDFJWFA', 'adminUU', 'Иванов Админ Петрович'),
-  ('90345.rfa', 'user', 'Береза Игорь Михайлович');
+  ('90345.rfa', 'user', 'Bereza Igor');
 
 --
 -- Merge the temporary users safely into the database. This is a two-step process to keep users from being created on every startup with a persistent store.
