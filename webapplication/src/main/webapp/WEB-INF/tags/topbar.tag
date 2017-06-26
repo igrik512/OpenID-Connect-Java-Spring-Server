@@ -3,7 +3,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="o" tagdir="/WEB-INF/tags"%>
 <c:choose>
-	<c:when test="${ not empty userInfo.preferredUsername }">
+	<c:when test="${ not empty userInfo.login }">
 		<c:set var="shortName" value="${ userInfo.login}" />
 	</c:when>
 	<c:otherwise>
@@ -11,19 +11,9 @@
 	</c:otherwise>
 </c:choose>
 <c:choose>
-	<c:when test="${ not empty userInfo.name }">
-		<c:set var="longName" value="${ userInfo.name }" />
+	<c:when test="${ not empty userInfo.fio }">
+		<c:set var="longName" value="${ userInfo.fio }" />
 	</c:when>
-	<c:otherwise>
-		<c:choose>
-			<c:when test="${ not empty userInfo.givenName || not empty userInfo.familyName }">
-				<c:set var="longName" value="${ userInfo.givenName } {$ userInfo.familyName }" />
-			</c:when>
-			<c:otherwise>
-				<c:set var="longName" value="${ shortName }" />
-			</c:otherwise>
-		</c:choose>
-	</c:otherwise>
 </c:choose>
 <div class="navbar navbar-inverse">
 	<div class="navbar-inner">

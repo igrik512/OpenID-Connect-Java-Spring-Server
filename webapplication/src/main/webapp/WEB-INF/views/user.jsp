@@ -8,7 +8,7 @@
 	<div class="row-fluid">
 		<div class="span10 offset1">
 
-			<h1>Hello ${ userInfo.name }</h1>
+			<h1>Hello ${ userInfo.fio}</h1>
 
 			<div>
 				<p>This page requires that the user be logged in with a valid account and the <code>ROLE_USER</code> Spring Security authority.
