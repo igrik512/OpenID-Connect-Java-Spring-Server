@@ -167,8 +167,7 @@ public class OAuthConfirmationController {
 		}
 
 		// add in any scopes that aren't system scopes to the end of the list
-		//IGBE CUSTOM HACK for working
-		sortedScopes.addAll(Sets.difference(systemScopes, scopes));
+		sortedScopes.addAll(Sets.difference(scopes,systemScopes));
 
 		model.put("scopes", sortedScopes);
 
