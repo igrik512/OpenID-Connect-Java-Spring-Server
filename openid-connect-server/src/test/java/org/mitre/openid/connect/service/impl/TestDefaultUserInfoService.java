@@ -100,11 +100,11 @@ public class TestDefaultUserInfoService {
 
 
 		userInfoAdmin = new DefaultUserInfo();
-		userInfoAdmin.setPreferredUsername(adminUsername);
+//		userInfoAdmin.setPreferredUsername(adminUsername);
 		userInfoAdmin.setSub(adminSub);
 
 		userInfoRegular = new DefaultUserInfo();
-		userInfoRegular.setPreferredUsername(regularUsername);
+//		userInfoRegular.setPreferredUsername(regularUsername);
 		userInfoRegular.setSub(regularSub);
 
 		publicClient1 = new ClientDetailsEntity();
@@ -212,7 +212,7 @@ public class TestDefaultUserInfoService {
 			@Override
 			public UserInfo answer(InvocationOnMock invocation) throws Throwable {
 				UserInfo userInfo = new DefaultUserInfo();
-				userInfo.setPreferredUsername(regularUsername);
+//				userInfo.setPreferredUsername(regularUsername);
 				userInfo.setSub(regularSub);
 
 				return userInfo;

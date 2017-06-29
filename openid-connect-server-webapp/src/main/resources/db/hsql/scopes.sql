@@ -16,6 +16,8 @@ INSERT INTO system_scope_TEMP (scope, description, icon, restricted, default_sco
   ('email', 'email address', 'envelope', false, true),
   ('address', 'physical address', 'home', false, true),
   ('phone', 'telephone number', 'bell', false, true),
+  ('login', 'login', 'bell', false, true),
+  ('fio', 'FIO', 'bell', false, true),
   ('offline_access', 'offline access', 'time', false, false);
   
 --

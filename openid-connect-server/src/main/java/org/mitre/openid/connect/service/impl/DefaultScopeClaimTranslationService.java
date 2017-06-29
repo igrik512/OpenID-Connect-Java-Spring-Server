@@ -16,14 +16,13 @@
  *******************************************************************************/
 package org.mitre.openid.connect.service.impl;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 import org.mitre.openid.connect.service.ScopeClaimTranslationService;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Service to map scopes to claims, and claims to Java field names
@@ -40,6 +39,7 @@ public class DefaultScopeClaimTranslationService implements ScopeClaimTranslatio
 	 * Default constructor; initializes scopesToClaims map
 	 */
 	public DefaultScopeClaimTranslationService() {
+		//OPENID 
 		scopesToClaims.put("openid", "sub");
 
 		scopesToClaims.put("profile", "name");
@@ -64,6 +64,10 @@ public class DefaultScopeClaimTranslationService implements ScopeClaimTranslatio
 		scopesToClaims.put("phone", "phone_number_verified");
 
 		scopesToClaims.put("address", "address");
+
+		//		IGBE ADD
+		scopesToClaims.put("login", "login");
+		scopesToClaims.put("fio", "fio");
 	}
 
 	/* (non-Javadoc)

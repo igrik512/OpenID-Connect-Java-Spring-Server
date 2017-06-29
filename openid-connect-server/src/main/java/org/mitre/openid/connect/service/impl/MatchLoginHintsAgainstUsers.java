@@ -26,8 +26,8 @@ import com.google.common.base.Strings;
 
 /**
  * Checks the login hint against the User Info collection, only populates it if a user is found.
- * @author jricher
  *
+ * @author jricher
  */
 public class MatchLoginHintsAgainstUsers implements LoginHintExtracter {
 
@@ -42,16 +42,11 @@ public class MatchLoginHintsAgainstUsers implements LoginHintExtracter {
 		if (Strings.isNullOrEmpty(loginHint)) {
 			return null;
 		} else {
-			UserInfo user = userInfoService.getByEmailAddress(loginHint);
+			UserInfo user = userInfoService.getByUsername(loginHint);
 			if (user == null) {
-				user = userInfoService.getByUsername(loginHint);
-				if (user == null) {
-					return null;
-				} else {
-					return user.getPreferredUsername();
-				}
+				return null;
 			} else {
-				return user.getPreferredUsername();
+				return user.getLogin();
 			}
 		}
 	}

@@ -16,8 +16,8 @@
  *******************************************************************************/
 package org.mitre.openid.connect.client;
 
-import java.util.Collection;
-
+import com.google.common.base.Strings;
+import com.nimbusds.jwt.JWT;
 import org.mitre.openid.connect.model.OIDCAuthenticationToken;
 import org.mitre.openid.connect.model.PendingOIDCAuthenticationToken;
 import org.mitre.openid.connect.model.UserInfo;
@@ -29,8 +29,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.google.common.base.Strings;
-import com.nimbusds.jwt.JWT;
+import java.util.Collection;
 
 /**
  * @author nemonik, Justin Richer
