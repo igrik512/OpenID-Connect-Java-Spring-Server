@@ -20,7 +20,6 @@ package org.mitre.openid.connect.repository.impl;
 import org.mitre.openid.connect.model.DefaultUserInfo;
 import org.mitre.openid.connect.model.UserInfo;
 import org.mitre.openid.connect.repository.UserInfoRepository;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,7 +32,7 @@ import static org.mitre.util.jpa.JpaUtil.getSingleResult;
  *
  * @author Michael Joseph Walsh
  */
-@Repository("jpaUserInfoRepository")
+//@Repository("jpaUserInfoRepository")
 public class JpaUserInfoRepository implements UserInfoRepository {
 
 	@PersistenceContext(unitName = "defaultPersistenceUnit")

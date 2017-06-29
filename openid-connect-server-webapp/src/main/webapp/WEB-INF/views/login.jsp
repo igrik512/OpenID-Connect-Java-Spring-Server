@@ -24,6 +24,8 @@ $(document).ready(function() {
 	</c:if>
 
 
+
+	<span>IGBE - ${ config.issuer }</span>
 	<div class="row-fluid">
 		<div class="span6 offset1 well">
 			<form action="${ config.issuer }${ config.issuer.endsWith('/') ? '' : '/' }login" method="POST">
