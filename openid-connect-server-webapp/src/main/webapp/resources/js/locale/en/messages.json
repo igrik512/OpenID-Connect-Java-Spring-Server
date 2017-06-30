@@ -496,7 +496,7 @@
 		"username": "Username",
 		"password": "Password",
 		"login-button": "Login",
-		"error": "The system was unable to log you in. Please try again."
+		"error": "The system was unable to log you in. Please check login and password."
 	},
 	"device": {
 		"request_code": {

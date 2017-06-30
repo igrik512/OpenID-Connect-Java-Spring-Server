@@ -58,7 +58,9 @@
 
 
 	<!-- IGBE custom config -->
-	<bean id="myAuthProvider" class="ru.bereza.openid.connect.repository.impl.LdapAuthenticationProvider"/>
+	<bean id="myAuthProvider" class="ru.bereza.openid.connect.repository.impl.LdapAuthenticationProvider">
+		<property name="ldapService" ref="ldapService"/>
+	</bean>
 
 	<bean id="ldapService" class="ru.bereza.openid.connect.repository.impl.LdapService">
 		<property name="ldapUrl" value="ldapUrl"/>

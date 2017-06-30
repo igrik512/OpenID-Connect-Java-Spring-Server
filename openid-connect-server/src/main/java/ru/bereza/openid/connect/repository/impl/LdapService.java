@@ -5,11 +5,14 @@ import org.mitre.openid.connect.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.AttributesMapper;
-import org.springframework.ldap.core.DistinguishedName;
+import org.springframework.ldap.core.AuthenticationSource;
+import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.ldap.query.LdapQuery;
+import org.springframework.ldap.query.LdapQueryBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.naming.NamingException;
@@ -35,14 +38,15 @@ public class LdapService {
 
 	private static final Logger logger = LoggerFactory.getLogger(LdapService.class);
 
-
 	private LdapTemplate template;
-
 
 	private String ldapUrl;
 	private String ldapLogin;
 	private String ldapPassword;
 	private String ldapBase;
+	private static final String LDAP_DOMAIN = "";
+
+	private AuthenticationSource staticAutheticationSource;
 
 	public String getLdapBase() {
 		return ldapBase;
@@ -76,19 +80,19 @@ public class LdapService {
 		this.ldapPassword = ldapPassword;
 	}
 
-	private LdapContextSource contextSource() {
+	private LdapContextSource createContextSource(AuthenticationSource authenticationSource) {
 		LdapContextSource contextSource = new LdapContextSource();
 		contextSource.setUrl(ldapUrl);
 		contextSource.setBase(ldapBase);
-		contextSource.setUserDn(ldapLogin);
-		contextSource.setPassword(ldapPassword);
+		contextSource.setAuthenticationSource(authenticationSource);
 		contextSource.afterPropertiesSet();
 		return contextSource;
 	}
 
 	@PostConstruct
 	public void init() {
-		template = new LdapTemplate(contextSource());
+		template = new LdapTemplate(createContextSource(new SimpleAuthenticationSource(ldapLogin, ldapPassword)));
+		staticAutheticationSource = new SimpleAuthenticationSource(ldapLogin, ldapPassword);
 	}
 
 
@@ -101,45 +105,42 @@ public class LdapService {
 		return filter.encode();
 	}
 
+	public UserInfo findByLogin(String username) {
+		return findByLogin(username, createLdapTemplate(ldapLogin, ldapPassword));
+	}
 
-	//todo IGBE refactor to find
-	private UserInfo findByIdentity(String username, LdapTemplate template) {
-		List result = template.search(DistinguishedName.EMPTY_PATH, createUsernameFilter(username), new UserInfoMapper(username));
 
-		if (result.size() > 0) {
-			return (UserInfo) result.get(0);
+	public UserInfo findByLdapLoginAndPassword(String username, String password) {
+		return findByLogin(username, createLdapTemplate(username, password));
+	}
+
+	private UserInfo findByLogin(String username, LdapTemplate template) {
+		List<UserInfo> searchResult;
+		try {
+			searchResult =
+				template.search(buildLdapQuery(username), new UserInfoMapper());
+		} catch (Exception ex) {
+			logger.error("", ex);
+			return null;
 		}
 
+		if (!searchResult.isEmpty()) {
+			return searchResult.get(0);
+		}
 		return null;
 	}
 
-	public UserInfo findByLdapLogin(String username) {
-		List result = template.search(DistinguishedName.EMPTY_PATH, createUsernameFilter(username), new UserInfoMapper(username));
-
-		if (result.size() > 0) {
-			return (UserInfo) result.get(0);
-		}
-
-		return null;
-	}
-
-	private class UserInfoMapper implements AttributesMapper {
-		private String login;
-
-		private UserInfoMapper(String login) {
-			this.login = login;
-		}
-
+	private class UserInfoMapper implements AttributesMapper<UserInfo> {
 		public UserInfo mapFromAttributes(Attributes attributes) throws NamingException {
 			DefaultUserInfo userInfo = new DefaultUserInfo();
-			userInfo.setLogin(login);
+			userInfo.setLogin(getValue(attributes, accountNameAttribute));
 			userInfo.setFio(getValue(attributes, lastNameAttribute) + " " + getValue(attributes, firstNameAttribute));
 			userInfo.setSub(UUID.randomUUID().toString());
 			//todo IGBE refactor
 			return userInfo;
 		}
 
-		protected String getValue(Attributes attributes, String name) {
+		private String getValue(Attributes attributes, String name) {
 			try {
 				return (String) attributes.get(name).get();
 			} catch (Exception ignore) {
@@ -147,4 +148,46 @@ public class LdapService {
 			}
 		}
 	}
+
+	private LdapQuery buildLdapQuery(String username) {
+		return LdapQueryBuilder.query().filter(createUsernameFilter(username));
+	}
+
+
+	private LdapTemplate createLdapTemplate(ContextSource ldapContextSource) {
+		LdapTemplate template = new LdapTemplate(ldapContextSource);
+		template.setIgnorePartialResultException(true);
+
+		return template;
+	}
+
+	private LdapTemplate createLdapTemplate(String username, String password) {
+		String login = LDAP_DOMAIN + "\\" + username;
+		AuthenticationSource authenticationSource = new SimpleAuthenticationSource(login, password);
+		LdapContextSource ldapContextSource = createContextSource(authenticationSource);
+		return createLdapTemplate(ldapContextSource);
+	}
+
+
+	class SimpleAuthenticationSource implements AuthenticationSource {
+		String username;
+		String password;
+
+		private SimpleAuthenticationSource(String username, String password) {
+			this.username = username;
+			this.password = password;
+		}
+
+
+		@Override
+		public String getPrincipal() {
+			return username;
+		}
+
+		@Override
+		public String getCredentials() {
+			return password;
+		}
+	}
+
 }

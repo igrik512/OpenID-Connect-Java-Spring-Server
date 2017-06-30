@@ -28,7 +28,7 @@ public class LdapUserInfoRepository implements UserInfoRepository {
 	public UserInfo getByUsername(String username) {
 		//cash results from ldap
 		if (userInfoCash.get(username) == null) {
-			UserInfo userInfo = ldapService.findByLdapLogin(username);
+			UserInfo userInfo = ldapService.findByLogin(username);
 			userInfoCash.put(username, userInfo);
 		}
 		return userInfoCash.get(username);

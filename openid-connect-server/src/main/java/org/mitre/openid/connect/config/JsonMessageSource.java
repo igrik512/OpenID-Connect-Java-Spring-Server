@@ -184,7 +184,7 @@ public class JsonMessageSource extends AbstractMessageSource {
 				}
 				languageMaps.put(locale, set);
 			} catch (JsonIOException | JsonSyntaxException | IOException e) {
-				logger.error("Unable to load locale", e);
+//				logger.error("Unable to load locale", e);
 			}
 		}
 

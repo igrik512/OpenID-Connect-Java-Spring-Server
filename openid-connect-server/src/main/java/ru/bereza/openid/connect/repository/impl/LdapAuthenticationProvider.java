@@ -1,6 +1,6 @@
 package ru.bereza.openid.connect.repository.impl;
 
-import org.mitre.openid.connect.repository.UserInfoRepository;
+import org.mitre.openid.connect.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,9 +18,6 @@ import java.util.List;
  * @author Igor Bereza
  */
 public class LdapAuthenticationProvider implements AuthenticationProvider {
-
-	private UserInfoRepository ldapUserInfoRepository;
-
 	private LdapService ldapService;
 
 	private static final Logger logger = LoggerFactory.getLogger(LdapAuthenticationProvider.class);
@@ -28,22 +25,17 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
-		logger.debug("{} ", token);
-
 		String login = (String) token.getPrincipal();
 		String password = (String) token.getCredentials();
-
-		if (!login.equals("berezaim")) {
-			throw new BadCredentialsException("Failed");
+		UserInfo userInfo = ldapService.findByLdapLoginAndPassword(login, password);
+		if (userInfo == null) {
+			throw new BadCredentialsException("Login or password is incorrect!");
 		}
-
 		List<GrantedAuthority> authorityList = new ArrayList<>();
 		authorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 			login, password, authorityList
 		);
-
-
 		return authenticationToken;
 	}
 
@@ -51,4 +43,9 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
 	public boolean supports(Class<?> authentication) {
 		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
 	}
+
+	public void setLdapService(LdapService ldapService) {
+		this.ldapService = ldapService;
+	}
+
 }
